@@ -45,17 +45,14 @@ public:
         std::vector<bool> visited(verticesCount, false);
         std::vector<int> finishOrder;
 
-        // First DFS to get finishing order
         for (int i = 0; i < verticesCount; i++) {
             if (!visited[i]) {
                 firstDFS(i, visited, finishOrder);
             }
         }
 
-        // Reset visited for second DFS
         visited.assign(verticesCount, false);
 
-        // Second DFS on transposed graph
         for (int i = finishOrder.size() - 1; i >= 0; i--) {
             int v = finishOrder[i];
             if (!visited[v]) {
@@ -86,7 +83,6 @@ int main(int argc, char* argv[]) {
     std::string inputFile, outputFile = "output.bin";
     bool showHelp = false;
 
-    // Parse command-line arguments
     for (int i = 1; i < argc; i++) {
         if (std::string(argv[i]) == "-h") {
             showHelp = true;
@@ -103,19 +99,19 @@ int main(int argc, char* argv[]) {
     }
 
     if (inputFile.empty()) {
-        std::cerr << "No input file specified.\n";
+        std::cerr << "Arquivos de entrada não especificados.\n";
         return 1;
     }
 
     std::ifstream inFile(inputFile);
     if (!inFile) {
-        std::cerr << "Error opening input file: " << inputFile << "\n";
+        std::cerr << "Erro ao abrir o arquivo de entrada: " << inputFile << "\n";
         return 1;
     }
 
     std::ofstream outFile(outputFile);
     if (!outFile) {
-        std::cerr << "Error opening output file: " << outputFile << "\n";
+        std::cerr << "Erro ao abrir o arquivo de saída: " << outputFile << "\n";
         return 1;
     }
 

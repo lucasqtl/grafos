@@ -5,7 +5,7 @@ floyd=./floyd.bin
 agm=./agm
 
 echo "Testando algoritmo de Floyd-Warshall"
-for i in inputs/*.mtx
+for i in inputs/*.txt
 do
     echo -e "\e[33mInstância $i\e[0m"
     $floyd -f $i > temp

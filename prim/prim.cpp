@@ -14,16 +14,16 @@ struct EdgeInfo {
 class UndirectedGraph {
 private:
     int vertexCount;
-    std::vector<std::vector<EdgeInfo>> adjacency;
+    std::vector<std::vector<EdgeInfo>> adjList;
 
 public:
     UndirectedGraph(int vertices) : vertexCount(vertices) {
-        adjacency.resize(vertices);
+        adjList.resize(vertices);
     }
 
     void insertEdge(int u, int v, int weight) {
-        adjacency[u].emplace_back(v, weight);
-        adjacency[v].emplace_back(u, weight);
+        adjList[u].emplace_back(v, weight);
+        adjList[v].emplace_back(u, weight);
     }
 
     void computeMST(int startVertex, bool displaySolution, std::ofstream& outFile) {
@@ -44,7 +44,7 @@ public:
             if (inTree[current]) continue;
             inTree[current] = true;
 
-            for (const auto& edge : adjacency[current]) {
+            for (const auto& edge : adjList[current]) {
                 int neighbor = edge.vertex;
                 int edgeWeight = edge.weight;
 
@@ -105,7 +105,6 @@ void processInput(const std::string& inputPath, const std::string& outputPath, i
         graph.insertEdge(u - 1, v - 1, weight);
     }
 
-    // Ajuste para vértice inicial: se não fornecido ou inválido, usa o vértice 0
     if (startVertex < 0 || startVertex >= vertices) {
         startVertex = 0;
     }

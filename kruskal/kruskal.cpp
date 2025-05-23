@@ -40,25 +40,32 @@ public:
     }
 };
 
-struct Connection {
-    int start, end, weight;
-    Connection(int s, int e, int w) : start(s), end(e), weight(w) {}
-};
-
 class GraphNetwork {
 private:
     int nodes;
-    std::vector<Connection> mstEdges;
+    std::vector<std::vector<std::pair<int, int>>> adjList;
+    std::vector<std::pair<std::pair<int, int>, int>> mstEdges;
 
 public:
-    GraphNetwork(int n) : nodes(n) {}
-
-    void addToMST(int s, int e, int w) {
-        mstEdges.emplace_back(s, e, w);
+    GraphNetwork(int n) : nodes(n) {
+        adjList.resize(n + 1);
     }
 
-    std::vector<Connection> getMSTEdges() const {
+    void addEdge(int u, int v, int w) {
+        adjList[u].emplace_back(v, w);
+        adjList[v].emplace_back(u, w);
+    }
+
+    void addToMST(int s, int e, int w) {
+        mstEdges.emplace_back(std::make_pair(s, e), w);
+    }
+
+    std::vector<std::pair<std::pair<int, int>, int>> getMSTEdges() const {
         return mstEdges;
+    }
+
+    std::vector<std::vector<std::pair<int, int>>> getAdjList() const {
+        return adjList;
     }
 };
 
@@ -82,39 +89,43 @@ void processGraph(const std::string& inputFile, const std::string& outputFile, b
     int vertices, edges;
     in >> vertices >> edges;
 
-    auto cmp = [](const Connection& a, const Connection& b) { return a.weight > b.weight; };
-    std::priority_queue<Connection, std::vector<Connection>, decltype(cmp)> edgeQueue(cmp);
+    GraphNetwork graph(vertices);
+    auto cmp = [](const std::pair<std::pair<int, int>, int>& a, const std::pair<std::pair<int, int>, int>& b) { return a.second > b.second; };
+    std::priority_queue<std::pair<std::pair<int, int>, int>, std::vector<std::pair<std::pair<int, int>, int>>, decltype(cmp)> edgeQueue(cmp);
 
     for (int i = 0; i < edges; ++i) {
         int u, v, w;
         in >> u >> v >> w;
-        edgeQueue.emplace(u, v, w);
+        graph.addEdge(u, v, w);
+        edgeQueue.emplace(std::make_pair(u, v), w);
     }
 
-    GraphNetwork mst(vertices);
     DisjointSet ds(vertices);
     int totalWeight = 0;
 
     while (!edgeQueue.empty()) {
-        Connection edge = edgeQueue.top();
+        auto edge = edgeQueue.top();
         edgeQueue.pop();
-        if (ds.findRoot(edge.start) != ds.findRoot(edge.end)) {
-            mst.addToMST(edge.start, edge.end, edge.weight);
-            ds.unite(edge.start, edge.end);
-            totalWeight += edge.weight;
+        int u = edge.first.first;
+        int v = edge.first.second;
+        int w = edge.second;
+        if (ds.findRoot(u) != ds.findRoot(v)) {
+            graph.addToMST(u, v, w);
+            ds.unite(u, v);
+            totalWeight += w;
         }
     }
 
     if (displaySolution) {
-        for (const auto& edge : mst.getMSTEdges()) {
-            out << "(" << edge.start << "," << edge.end << ") ";
-            std::cout << "(" << edge.start << "," << edge.end << ") ";
+        for (const auto& edge : graph.getMSTEdges()) {
+            out << "(" << edge.first.first << "," << edge.first.second << ") ";
+            std::cout << "(" << edge.first.first << "," << edge.first.second << ") ";
         }
         std::cout << "\n";
         out << "\n";
     } else {
         out << totalWeight;
-        std::cout << totalWeight; // Removido o "\n" para evitar que o script interprete a nova linha
+        std::cout << totalWeight;
     }
 
     in.close();
