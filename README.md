@@ -3,6 +3,10 @@
 
 Este projeto contém implementações de algoritmos desenvolvidos como parte da disciplina de **Teoria dos Grafos**.
 
+# Aluno
+José Lucas Oliveira Quintela - 23211624
+jloq@ic.ufal.br
+
 ## 📁 Estrutura do Projeto
 
 Cada algoritmo está organizado em seu próprio diretório, contendo:
@@ -19,3 +23,5 @@ Cada algoritmo está organizado em seu próprio diretório, contendo:
 - **Kruskal**: Geração de árvore geradora mínima usando união por conjuntos disjuntos.
 - **Prim**: Geração de árvore geradora mínima a partir de um vértice inicial.
 
+### Script de Execução
+A pasta bat-floyd/ contém um script .bat destinado a facilitar a execução do algoritmo de Floyd-Warshall.
