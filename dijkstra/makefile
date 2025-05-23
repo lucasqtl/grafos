@@ -1,7 +1,12 @@
-CXX = g++ CXXFLAGS = -Wall -Wextra -std=c++11 TARGET = dijkstra.bin
+CXX=g++
+CXXFLAGS=-std=c++11 -Wall
+TARGET=dijkstra.bin
 
 all: $(TARGET)
 
-$(TARGET): main.cpp grafo.cpp $(CXX) $(CXXFLAGS) -o $(TARGET) main.cpp grafo.cpp
+$(TARGET): dijkstra.cpp
+	$(CXX) $(CXXFLAGS) dijkstra.cpp -o $(TARGET)
 
-clean: rm -f $(TARGET)
+clean:
+	rm -f $(TARGET)
+	

@@ -1,7 +1,12 @@
-CC = g++ CFLAGS = -Wall -g TARGET = kosaraju.bin
+CXX=g++
+CXXFLAGS=-std=c++11 -Wall
+TARGET=kosaraju.bin
 
 all: $(TARGET)
 
-$(TARGET): kosaraju.cpp $(CC) $(CFLAGS) -o $(TARGET) kosaraju.cpp
+$(TARGET): kosaraju.cpp
+	$(CXX) $(CXXFLAGS) kosaraju.cpp -o $(TARGET)
 
-clean: rm -f $(TARGET)
+clean:
+	rm -f $(TARGET)
+	
